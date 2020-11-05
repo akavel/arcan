@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   CMAKE_CXX_FLAGS = "-msse4.1";
   DRM_INCLUDE_DIR = "${pkgs.libdrm.dev}/include/libdrm";
   buildInputs = with pkgs; [
-    freetype openal sqlite mesa_noglu libGL SDL libdrm.dev
+    freetype openal sqlite mesa_noglu libGL SDL2 libdrm.dev
     lua51Packages.lua libusb ffmpeg libxkbcommon
     lzma vlc apr harfbuzz
   ] ;
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   preConfigurePhases = ["noSuidInstall"];
 
   noSuidInstall = ''
+    rm -rf build
     mkdir -p build
     sed -i 's/SETUID//g' src/CMakeLists.txt 
   '';
