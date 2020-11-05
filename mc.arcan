@@ -1,0 +1,1 @@
+PATH=$PATH:. nixGLIntel ./arcan -T ../data/scripts -p ../data/resources ../data/appl/welcome
