@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SIMD=Off"
     "-DDRM_INCLUDE_DIR=${DRM_INCLUDE_DIR}"
     "-DVIDEO_PLATFORM=egl-dri"
+    "-DHYBRID_SDL=On"  # "Produce an arcan_sdl main binary as well"
     "../src"
   ];
 #  makeFlags="-C build";
