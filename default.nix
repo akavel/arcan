@@ -24,7 +24,12 @@ stdenv.mkDerivation rec {
     sed -i 's/SETUID//g' src/CMakeLists.txt 
   '';
 
-  cmakeFlags = "-DENABLE_SIMD=Off -DDRM_INCLUDE_DIR=${DRM_INCLUDE_DIR} -DVIDEO_PLATFORM=egl-dri ../src";
+  cmakeFlags = builtins.concatStringsSep " " [
+    "-DENABLE_SIMD=Off"
+    "-DDRM_INCLUDE_DIR=${DRM_INCLUDE_DIR}"
+    "-DVIDEO_PLATFORM=egl-dri"
+    "../src"
+  ];
 #  makeFlags="-C build";
 
 
