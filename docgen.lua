@@ -133,11 +133,13 @@ gen = {
         end,
         func = function(f)
             printf('<hr><h3 id="f_%s">%s &mdash; %s</h3>\n', f.name, f.name, f.short[1])
-            printf('<ul><li>returns: ')
+            printf('<ul><li><em>returns:</em> ')
             if any(f.outargs) then
-                printf('<em>' .. table.concat(f.outargs, ', ') .. '</em>')
+                -- printf('<em>' .. table.concat(f.outargs, ', ') .. '</em>')
+                printf(table.concat(f.outargs, ', '))
             else
-                printf('<em>nil</em>')
+                -- printf('<em>nil</em>')
+                printf('nil')
             end
             printf('</li>')
             for _, a in ipairs(f.inargs or {''}) do
