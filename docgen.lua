@@ -159,10 +159,18 @@ end
 gen = {
     html = {
         toc_start = function()
-            print('<html><head>')
-            print('<title>Arcan Lua API</title>')
-            print('<style type="text/css">html{margin:1em 20%}</style>')
-            print('</head><body>')
+            print([[
+<html><head>
+<title>Arcan Lua API</title>
+<style type="text/css">
+html{
+    margin:1em 20%;
+    font-family: Helvetica, Arial, sans-serif;
+    text-align: justify;
+}
+</style>
+</head><body>
+]])
             print('<h2>Index:</h2>\n<ul>')
         end,
         toc_group = function(g)
@@ -186,7 +194,7 @@ gen = {
             end
             printf('</li>')
             for _, a in ipairs(f.inargs or {''}) do
-                printf('<li>(%s)</li>\n', a
+                printf('<li><em>%s</em> (%s)</li>\n', f.name, a
                     :gsub('%*([%w_:]+)%*', '<b>%1</b>')
                 )
             end
