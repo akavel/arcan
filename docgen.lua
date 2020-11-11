@@ -201,9 +201,12 @@ gen = {
                 )
             end
 
-            if any(f.notes) then
-                for _, n in ipairs(f.notes) do
-                    printf('<p><strong>Note:</strong> %s</p>\n', n)
+            if any(f.note) then
+                for _, n in ipairs(f.note) do
+                    printf('<p><strong>Note:</strong> %s</p>\n', n
+                    :gsub('%*([%w_:]+)%*', '<b>%1</b>')
+                    :gsub('%f[%w_]ref:([%w_]+)%f[^%w_]', '<a href="#f_%1">%1</a>')
+                    )
                 end
             end
 
