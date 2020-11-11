@@ -84,6 +84,7 @@ function scandoc(funcname)
         if group then
             in_group = group
             local t = res[group] or {}
+            while t[#t]=='' do t[#t]=nil end -- trim spurious paragraph breaks
             t[#t+1] = rest
             res[group] = t
         else
