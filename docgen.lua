@@ -98,9 +98,52 @@ function scandoc(funcname)
     end
 
     -- TODO(akavel): Parse examples
+    if line then
+        -- read all remaining lines
+        local buf = {line}
+        while true do
+            line = fh:read '*l'
+            if not line then
+                break
+            end
+            -- collect all, except spurious empty lines after #-directives
+            if not buf[#buf]:match '^#' or line ~= '' then
+                buf[#buf+1] = line
+            end
+        end
+        -- extract examples from #-directives
+        res.examples = {good={}, bad={}}
+        for i = 0, 10 do
+            local suffix = i > 0 and tostring(i) or ""
+            local e = res.examples
+            e.good[#e.good+1] = scanexample(buf, "MAIN"..suffix)
+            e.bad[#e.bad+1] = scanexample(buf, "ERROR"..suffix)
+        end
+    end
 
     fh:close()
     return res
+end
+
+function scanexample(lines, id)
+    local res = {}
+    local id_found = false
+    local line_ok = true
+    for _, l in ipairs(lines) do
+        if l == '#ifdef '..id then
+            line_ok = true
+            id_found = true
+        elseif l:match '^#ifdef' then
+            line_ok = false
+        elseif l == '#endif' then
+            line_ok = true
+        elseif line_ok then
+            res[#res+1] = l
+        end
+    end
+    if id_found then
+        return table.concat(res, '\n')
+    end
 end
 
 local function printf(fmt, ...)
@@ -170,6 +213,17 @@ gen = {
                     printf('<li><a href="#f_%s">%s</a></li>\n', r, r)
                 end
                 print('</ul>')
+            end
+
+            if f.examples then
+                for _, ex in ipairs(f.examples.good) do
+                    print('<h4>Example</h4>')
+                    printf('<pre>%s</pre>\n', ex)
+                end
+                for _, ex in ipairs(f.examples.bad) do
+                    print('<h4><em>Misuse</em></h4>')
+                    printf('<pre><em>%s</em></pre>\n', ex)
+                end
             end
             -- print(f.name, f.group and f.group[1] or '???')
         end,
