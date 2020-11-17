@@ -13,7 +13,7 @@
         version="1";
         src = ./.;
         nativeBuildInputs = with pkgs; [
-          cmake git
+          cmake git makeWrapper
         ] ;
         CMAKE_CXX_FLAGS = "-msse4.1";
         DRM_INCLUDE_DIR = "${pkgs.libdrm.dev}/include/libdrm";
@@ -38,10 +38,17 @@
           "-DHYBRID_SDL=On"  # "Produce an arcan_sdl main binary as well"
           "../src"
         ];
-        #  makeFlags="-C build";
-
 
         hardeningDisable = [ "all" ];
+
+        postFixup = ''
+          data=$src/data
+          wrapProgram $out/bin/arcan \
+            --prefix PATH : $out/bin \
+            --add-flags "-T $data/scripts" \
+            --add-flags "-p $data/resources" \
+            --add-flags "-B $out/bin/arcan_frameserver"
+        '';
       };
 
   };
